@@ -5,12 +5,12 @@
 
       <form @submit.prevent="handleLogin" class="auth-form">
         <div class="form-group">
-          <label for="email">Email</label>
+          <label for="username">Имя пользователя</label>
           <input
-            type="email"
-            id="email"
-            v-model="email"
-            placeholder="Введите ваш email"
+            type="text"
+            id="username"
+            v-model="username"
+            placeholder="Введите ваш username"
             required
           >
         </div>
@@ -42,15 +42,15 @@ export default {
   name: 'LoginView',
   data() {
     return {
-      email: '',
+      username: '',
       password: ''
     }
   },
   methods: {
     handleLogin() {
-      // Здесь будет логика входа
-      console.log('Login attempt with:', this.email, this.password)
-      // В реальном приложении здесь был бы вызов API
+      // logic
+      console.log('Login attempt with:', this.username, this.password)
+      // api
     }
   },
   metaInfo: {

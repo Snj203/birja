@@ -3,14 +3,59 @@
     <div class="auth-container">
       <h1>Регистрация</h1>
 
-      <form @submit.prevent="handleRegister" class="auth-form">
+      <div v-if="step === 1" class="user-type-selection">
+        <h3>Выберите тип аккаунта:</h3>
+        <div class="user-types">
+          <div
+            v-for="type in userTypes"
+            :key="type.value"
+            class="user-type-card"
+            :class="{ selected: selectedUserType === type.value }"
+            @click="selectUserType(type.value)"
+          >
+            <h4>{{ type.label }}</h4>
+            <p>{{ type.description }}</p>
+          </div>
+        </div>
+        <button
+          class="auth-button"
+          @click="nextStep"
+          :disabled="!selectedUserType"
+        >
+          Продолжить
+        </button>
+      </div>
+
+      <form v-if="step === 2" @submit.prevent="handleRegister" class="auth-form">
+        <div class="form-group">
+          <label for="username">Имя пользователя</label>
+          <input
+            type="text"
+            id="username"
+            v-model="formData.username"
+            placeholder="Введите ваше имя пользователя"
+            required
+          >
+        </div>
+
         <div class="form-group">
           <label for="name">Имя</label>
           <input
             type="text"
             id="name"
-            v-model="name"
+            v-model="formData.name"
             placeholder="Введите ваше имя"
+            required
+          >
+        </div>
+
+        <div class="form-group">
+          <label for="surname">Фамилия</label>
+          <input
+            type="text"
+            id="surname"
+            v-model="formData.surname"
+            placeholder="Введите вашу Фамилия"
             required
           >
         </div>
@@ -20,7 +65,7 @@
           <input
             type="email"
             id="email"
-            v-model="email"
+            v-model="formData.email"
             placeholder="Введите ваш email"
             required
           >
@@ -31,28 +76,53 @@
           <input
             type="password"
             id="password"
-            v-model="password"
+            v-model="formData.password"
             placeholder="Введите пароль"
             required
           >
         </div>
 
         <div class="form-group">
-          <label for="confirmPassword">Подтвердите пароль</label>
+          <label for="password-d">Повторите пароль</label>
           <input
             type="password"
-            id="confirmPassword"
-            v-model="confirmPassword"
-            placeholder="Повторите пароль"
+            id="password-d"
+            v-model="formData.confirmPassword"
+            placeholder="Введите пароль"
             required
           >
         </div>
+
+        <template v-if="selectedUserType === 'tutor'">
+          <div class="form-group">
+            <label for="name">Описание/Опыт</label>
+            <textarea
+              id="dec"
+              v-model="formData.dec"
+              placeholder="Введите описание вышего опыта работы/что вы преподаёте"
+              required
+              rows="12"
+              cols="55"
+            ></textarea>
+          </div>
+
+          <div class="form-group">
+            <label for="exp">Лет опыта</label>
+            <input
+              type="exp"
+              id="exp"
+              v-model="formData.exp"
+              placeholder=""
+            >
+          </div>
+        </template>
 
         <button type="submit" class="auth-button">Зарегистрироваться</button>
       </form>
 
       <div class="auth-footer">
         <p>Уже есть аккаунт? <router-link to="/login">Войдите</router-link></p>
+        <button v-if="step === 2" class="back-button" @click="prevStep">Назад</button>
       </div>
     </div>
   </main>
@@ -63,36 +133,64 @@ export default {
   name: 'RegisterView',
   data() {
     return {
-      name: '',
-      email: '',
-      password: '',
-      confirmPassword: ''
+      step: 1,
+      selectedUserType: null,
+      userTypes: [
+        {
+          value: 'tutor',
+          label: 'Учитель',
+          description: ' Создавать обьявления '
+        },
+        {
+          value: 'student',
+          label: 'Студент',
+          description: ' Искать обьявления '
+        }
+      ],
+      formData: {
+        username: '',
+        name: '',
+        surname: '',
+        email: '',
+        password: '',
+        exp: '',
+        dec: '',
+        confirmPassword: '',
+
+      }
     }
   },
   methods: {
+    selectUserType(type) {
+      this.selectedUserType = type
+    },
+    nextStep() {
+      if (this.selectedUserType) {
+        this.step = 2
+      }
+    },
+    prevStep() {
+      this.step = 1
+    },
     handleRegister() {
-      if (this.password !== this.confirmPassword) {
+      if (this.formData.password !== this.formData.confirmPassword) {
         alert('Пароли не совпадают!')
         return
       }
 
-      // Здесь будет логика регистрации
-      console.log('Registration attempt with:', {
-        name: this.name,
-        email: this.email,
-        password: this.password
-      })
-      // В реальном приложении здесь был бы вызов API
+      const userData = {
+        ...this.formData,
+        userType: this.selectedUserType
+      }
+
+      console.log('Registration data:', userData)
+      // API
     }
-  },
-  metaInfo: {
-    title: 'Регистрация'
   }
 }
 </script>
 
 <style scoped>
-/* Стили такие же как в LoginView, можно вынести в общий файл */
 .auth-view {
   display: flex;
   justify-content: center;
@@ -157,5 +255,49 @@ export default {
 .auth-footer a {
   color: #42b983;
   text-decoration: none;
+}
+
+.user-type-selection {
+  text-align: center;
+}
+
+.user-types {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  margin: 2rem 0;
+}
+
+.user-type-card {
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 200px;
+}
+
+.user-type-card:hover {
+  border-color: #42b983;
+}
+
+.user-type-card.selected {
+  border-color: #42b983;
+  background-color: rgba(66, 185, 131, 0.1);
+}
+
+.back-button {
+  background: none;
+  border: none;
+  color: #42b983;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+h1{
+  margin-left: 80px;
+}
+.back-button:hover {
+  text-decoration: underline;
 }
 </style>
