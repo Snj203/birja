@@ -1,20 +1,43 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Главная</router-link> |
-      <router-link to="/add">Добавить репетитора</router-link>
-    </nav>
-    <router-view />
+    <div class="navbar"><NavBar /></div>
+    <div class="container-view"><router-view /></div>
   </div>
 </template>
 
-<style>
-#app {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+<script>
+import NavBar from './components/NavBar.vue'
+
+export default {
+  name: 'App',
+  components: {
+    NavBar
+  }
 }
-nav {
-  margin-bottom: 20px;
+</script>
+
+<style>
+/* Global styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+}
+
+#app {
+  display: flex;
+  flex-direction: column;
+  min-height: 90vh;
+}
+
+.navbar {
+  height: 7vh;
+}
+.container-view {
+  min-width: 90vw;         /* или фиксированная ширина, например 800px */
+  min-height: 80vh;       /* или min-height, max-height и т.д. */
+  padding: 1rem;
+  background-color: #fff;
+  overflow: auto;      /* добавит скролл, если контент выходит за границы */
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 </style>

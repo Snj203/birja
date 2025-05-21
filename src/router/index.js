@@ -1,16 +1,36 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '../views/Home-Page.vue'
-import TutorDetails from '../views/TutorDetails.vue'
-import AddTutor from '../views/AddTutor.vue'
 
 const routes = [
-  { path: '/', component: HomePage },
-  { path: '/tutor/:id', component: TutorDetails, props: true },
-  { path: '/add', component: AddTutor }
+  {
+    path: '/',
+    name: 'home',
+    component: HomePage
+  },
+  // {
+  //   path: '/tab1',
+  //   name: 'tab1',
+  //   component: () => import('../views/Tab1View.vue')
+  // },
+  // {
+  //   path: '/tab2',
+  //   name: 'tab2',
+  //   component: () => import('../views/Tab2View.vue')
+  // },
+  {
+    path: '/login',
+    name: 'login',
+    component: () => import('../views/LoginView.vue')
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: () => import('../views/RegisterView.vue')
+  }
 ]
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory(process.env.BASE_URL),
   routes
 })
 
