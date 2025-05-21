@@ -33,11 +33,11 @@ body {
   height: 7vh;
 }
 .container-view {
-  min-width: 90vw;         /* или фиксированная ширина, например 800px */
-  min-height: 80vh;       /* или min-height, max-height и т.д. */
+  min-width: 90vw;
+  min-height: 80vh;
   padding: 1rem;
   background-color: #fff;
-  overflow: auto;      /* добавит скролл, если контент выходит за границы */
+  overflow: auto;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 </style>
