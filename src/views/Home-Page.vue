@@ -2,6 +2,7 @@
   <div class="home">
     <h1>Главная страница</h1>
     <p>Добро пожаловать на наш сайт!</p>
+    <router-link to="/board">Доска объявлений</router-link>
   </div>
 </template>
 

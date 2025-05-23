@@ -6,11 +6,20 @@
         <span class="version">v{{ version }}</span>
       </div>
       <nav class="user-menu">
-        <button class="notification-btn" @click="toggleNotifications">
-          <span v-if="unreadNotifications" class="badge">{{ unreadNotifications }}</span>
-          <i class="icon-bell"></i>
-        </button>
-        <dropdown-menu :user="currentUser" />
+        <!-- Отображаем кнопки входа/регистрации, если пользователь не аутентифицирован -->
+        <div v-if="!isAuthenticated" class="auth-buttons">
+          <button class="auth-btn login-btn" @click="handleLogin">Войти</button>
+          <button class="auth-btn signup-btn" @click="handleSignup">Регистрация</button>
+        </div>
+        <!-- Отображаем меню пользователя и уведомления, если пользователь аутентифицирован -->
+        <template v-else>
+          <button class="notification-btn" @click="toggleNotifications">
+            <span v-if="unreadNotifications" class="badge">{{ unreadNotifications }}</span>
+            <i class="icon-bell"></i>
+          </button>
+          <dropdown-menu :user="currentUser" />
+          <button class="auth-btn logout-btn" @click="handleLogout">Выйти</button>
+        </template>
       </nav>
     </div>
   </header>
@@ -23,7 +32,7 @@ import DropdownMenu from './DropdownMenu.vue';
 const props = defineProps({
   title: {
     type: String,
-    default: 'TutorPro'
+    default: 'Биржа мемов'
   },
   version: {
     type: String,
@@ -31,13 +40,51 @@ const props = defineProps({
   }
 });
 
-const currentUser = ref({
-  name: 'Иван Петров',
-  role: 'Репетитор'
-});
+// Состояние аутентификации пользователя
+const isAuthenticated = ref(false);
 
-const unreadNotifications = ref(3);
+// Данные пользователя (по умолчанию null, если не аутентифицирован)
+const currentUser = ref(null);
 
+// Количество непрочитанных уведомлений
+const unreadNotifications = ref(0);
+
+// Функция для обработки входа
+const handleLogin = () => {
+  console.log('Login button clicked');
+  // Здесь должна быть логика входа пользователя, например, вызов API
+  // После успешного входа обновляем состояние
+  isAuthenticated.value = true;
+  currentUser.value = {
+    name: 'Иван Петров',
+    role: 'Репетитор'
+  };
+  unreadNotifications.value = 3;
+};
+
+// Функция для обработки регистрации
+const handleSignup = () => {
+  console.log('Signup button clicked');
+  // Здесь должна быть логика регистрации, например, вызов API
+  // После успешной регистрации можно сразу выполнить вход
+  isAuthenticated.value = true;
+  currentUser.value = {
+    name: 'Иван Петров',
+    role: 'Репетитор'
+  };
+  unreadNotifications.value = 3;
+};
+
+// Функция для обработки выхода
+const handleLogout = () => {
+  console.log('Logout button clicked');
+  // Здесь должна быть логика выхода, например, очистка токена
+  isAuthenticated.value = false;
+  currentUser.value = null;
+  unreadNotifications.value = 0;
+};
+
+// Функция для уведомлений
 const toggleNotifications = () => {
   console.log('Show notifications');
 };
@@ -73,6 +120,47 @@ const toggleNotifications = () => {
   display: flex;
   gap: 1rem;
   align-items: center;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.auth-btn {
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
+}
+
+.login-btn {
+  background-color: #3498db;
+  color: white;
+}
+
+.login-btn:hover {
+  background-color: #2980b9;
+}
+
+.signup-btn {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.signup-btn:hover {
+  background-color: #27ae60;
+}
+
+.logout-btn {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.logout-btn:hover {
+  background-color: #c0392b;
 }
 
 .notification-btn {
