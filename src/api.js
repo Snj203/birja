@@ -35,5 +35,9 @@ export default {
   // Удалить объявление
   deleteAd(id) {
     return api.delete(`/ads/${id}`);
+  },
+
+  getSubjects() {
+    return api.get('/subjects');
   }
 };

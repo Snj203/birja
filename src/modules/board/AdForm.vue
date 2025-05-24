@@ -28,7 +28,7 @@
 
     <div class="form-group">
       <label>Предмет*</label>
-      <select v-model="form.subject" required>
+      <select v-model="form.lessonName" required>
         <option value="">Выберите предмет</option>
         <option v-for="subject in subjects" :value="subject">{{ subject }}</option>
       </select>
@@ -56,7 +56,7 @@
 
     <div class="form-row">
       <div class="form-group">
-        <label>Цена (₽/час)*</label>
+        <label>Цена (Сом/час)*</label>
         <input
           type="number"
           v-model.number="form.price"
@@ -65,14 +65,14 @@
         >
       </div>
 
-      <div class="form-group">
-        <label>Место проведения</label>
-        <input
-          type="text"
-          v-model="form.location"
-          placeholder="Например: Онлайн или Москва, м. Китай-город"
-        >
-      </div>
+<!--      <div class="form-group">-->
+<!--        <label>Место проведения</label>-->
+<!--        <input-->
+<!--          type="text"-->
+<!--          v-model="form.location"-->
+<!--          placeholder="Например: Онлайн или Москва, м. Китай-город"-->
+<!--        >-->
+<!--      </div>-->
     </div>
 
     <div class="form-actions">
@@ -106,7 +106,7 @@ const form = ref({
   title: '',
   description: '',
   price: null,
-  location: 'Онлайн'
+  // location: 'Онлайн'
 });
 
 const submitForm = () => {
