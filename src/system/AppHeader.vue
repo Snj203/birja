@@ -8,8 +8,22 @@
       <nav class="user-menu">
         <!-- Отображаем кнопки входа/регистрации, если пользователь не аутентифицирован -->
         <div v-if="!isAuthenticated" class="auth-buttons">
-          <button class="auth-btn login-btn" @click="handleLogin">Войти</button>
-          <button class="auth-btn signup-btn" @click="handleSignup">Регистрация</button>
+          <div class="nav-right">
+            <router-link
+              to="/login"
+              class="nav-link"
+              active-class="active"
+            >
+              Войти
+            </router-link>
+            <router-link
+              to="/register"
+              class="nav-link"
+              active-class="active"
+            >
+              Зарегистрироваться
+            </router-link>
+          </div>
         </div>
         <!-- Отображаем меню пользователя и уведомления, если пользователь аутентифицирован -->
         <template v-else>
@@ -49,32 +63,6 @@ const currentUser = ref(null);
 // Количество непрочитанных уведомлений
 const unreadNotifications = ref(0);
 
-// Функция для обработки входа
-const handleLogin = () => {
-  console.log('Login button clicked');
-  // Здесь должна быть логика входа пользователя, например, вызов API
-  // После успешного входа обновляем состояние
-  isAuthenticated.value = true;
-  currentUser.value = {
-    name: 'Иван Петров',
-    role: 'Репетитор'
-  };
-  unreadNotifications.value = 3;
-};
-
-// Функция для обработки регистрации
-const handleSignup = () => {
-  console.log('Signup button clicked');
-  // Здесь должна быть логика регистрации, например, вызов API
-  // После успешной регистрации можно сразу выполнить вход
-  isAuthenticated.value = true;
-  currentUser.value = {
-    name: 'Иван Петров',
-    role: 'Репетитор'
-  };
-  unreadNotifications.value = 3;
-};
-
 // Функция для обработки выхода
 const handleLogout = () => {
   console.log('Logout button clicked');
@@ -91,6 +79,28 @@ const toggleNotifications = () => {
 </script>
 
 <style scoped>
+.nav-right {
+  display: flex;
+  gap: 1rem;
+}
+
+.nav-link {
+  padding: 0.5rem 1rem;
+  text-decoration: none;
+  background-color: white;
+  color: brown;
+  border-radius: 4px;
+}
+
+.nav-link:hover {
+  background-color: #e0e0e0;
+}
+
+.nav-link.active {
+  background-color: #42b983;
+  color: white;
+}
+
 .app-header {
   background-color: #2c3e50;
   color: white;
