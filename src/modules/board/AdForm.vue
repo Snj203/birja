@@ -28,7 +28,7 @@
 
     <div class="form-group">
       <label>Предмет*</label>
-      <select v-model="form.subject" required>
+      <select v-model="form.lessonName" required>
         <option value="">Выберите предмет</option>
         <option v-for="subject in subjects" :value="subject">{{ subject }}</option>
       </select>

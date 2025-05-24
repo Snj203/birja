@@ -16,9 +16,9 @@
 
         <div class="filter-group">
           <label>Предмет:</label>
-          <select v-model="filters.subject">
+          <select v-model="filters.lessonName">
             <option value="all">Все предметы</option>
-            <option v-for="subject in subjects" :value="subject">{{ subject }}</option>
+            <option v-for="lesson in subjects" :key="lesson" :value="lesson">{{ lesson }}</option>
           </select>
         </div>
 
@@ -62,10 +62,11 @@
 
           <div class="form-group">
             <label>Предмет*</label>
-            <select v-model="newAd.subject" required>
-              <option value="">Выберите предмет</option>
-              <option v-for="subject in subjects" :value="subject">{{ subject }}</option>
+            <select v-model="filters.lessonName">
+              <option value="all">Все предметы</option>
+              <option v-for="lesson in subjects" :key="lesson" :value="lesson">{{ lesson }}</option>
             </select>
+
           </div>
 
           <div class="form-group">
@@ -90,7 +91,7 @@
 
           <div class="form-row">
             <div class="form-group">
-              <label>Цена (₽/час)*</label>
+              <label>Цена (сом/час)*</label>
               <input
                 type="number"
                 v-model.number="newAd.price"
@@ -127,11 +128,11 @@
 
         <div class="ad-body">
           <h3 class="ad-title">{{ ad.title }}</h3>
-          <p class="ad-subject">Предмет: {{ ad.subject }}</p>
+          <p class="ad-lessonName">Предмет: {{ ad.lessonName }}</p>
           <p class="ad-description">{{ ad.description }}</p>
 
           <div class="ad-details">
-            <span>Цена: {{ ad.price }} ₽/час</span>
+            <span>Цена: {{ ad.price }} сом/час</span>
             <span>Место: {{ ad.location }}</span>
           </div>
         </div>
@@ -152,7 +153,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed } from 'vue';
+import {onMounted, ref, computed} from 'vue';
 import api from '@/api';
 
 // Состояние компонента
@@ -161,40 +162,32 @@ const isLoading = ref(true);
 const showForm = ref(false);
 const filters = ref({
   type: 'all',
-  subject: 'all'
+  lessonName: 'all'
 });
+const subjects = ref([]);
 
 // Форма нового объявления
 const newAd = ref({
   type: '',
-  subject: '',
+  lessonName: '',
   title: '',
   description: '',
   price: null,
-  location: 'Онлайн'
 });
 
 // Список предметов
-const subjects = ref([
-  'Математика',
-  'Физика',
-  'Химия',
-  'Английский язык',
-  'Русский язык',
-  'История',
-  'Программирование'
-]);
 
 // Загрузка объявлений при монтировании
 onMounted(async () => {
   try {
-    const response = await api.getAllAds();
-    ads.value = response.data;
+    const responseAds = await api.getAllAds();
+    ads.value = responseAds.data;
+
+    const responseSubjects = await api.getSubjects();
+    subjects.value = responseSubjects.data.map(subject => subject.name);
+    console.log('subjects', subjects.value);
   } catch (error) {
-    console.error('Ошибка загрузки:', error);
-    alert('Не удалось загрузить объявления');
-  } finally {
-    isLoading.value = false;
+    console.error(error);
   }
 });
 
@@ -202,14 +195,14 @@ onMounted(async () => {
 const filteredAds = computed(() => {
   return ads.value.filter(ad => {
     const typeMatch = filters.value.type === 'all' || ad.type === filters.value.type;
-    const subjectMatch = filters.value.subject === 'all' || ad.subject === filters.value.subject;
-    return typeMatch && subjectMatch;
+    const lessonMatch = filters.value.lessonName === 'all' || ad.lessonName === filters.value.lessonName;
+    return typeMatch && lessonMatch;
   });
 });
 
 // Форматирование даты
 const formatDate = (dateString) => {
-  const options = { day: 'numeric', month: 'long' };
+  const options = {day: 'numeric', month: 'long'};
   return new Date(dateString).toLocaleDateString('ru-RU', options);
 };
 
@@ -217,7 +210,7 @@ const formatDate = (dateString) => {
 const resetFilters = () => {
   filters.value = {
     type: 'all',
-    subject: 'all'
+    lessonName: 'all'
   };
 };
 
@@ -237,7 +230,7 @@ const submitNewAd = async () => {
     // Сброс формы
     newAd.value = {
       type: '',
-      subject: '',
+      lessonName: '',
       title: '',
       description: '',
       price: null,
@@ -251,7 +244,6 @@ const submitNewAd = async () => {
 </script>
 
 <style scoped>
-/* Стили из предыдущего примера (TutorBoard) */
 .tutor-board {
   max-width: 1200px;
   margin: 0 auto;
@@ -321,7 +313,7 @@ const submitNewAd = async () => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -440,7 +432,7 @@ const submitNewAd = async () => {
 
 .ad-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
 }
 
 .ad-header {
@@ -468,7 +460,7 @@ const submitNewAd = async () => {
   color: #2c3e50;
 }
 
-.ad-subject {
+.ad-lessonName {
   color: #7f8c8d;
   margin: 5px 0;
   font-size: 0.9em;
