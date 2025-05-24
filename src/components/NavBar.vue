@@ -9,20 +9,6 @@
       >
         Главная
       </router-link>
-<!--      <router-link-->
-<!--        to="/tab1"-->
-<!--        class="nav-link"-->
-<!--        active-class="active"-->
-<!--      >-->
-<!--        Кнопка 1-->
-<!--      </router-link>-->
-<!--      <router-link-->
-<!--        to="/tab2"-->
-<!--        class="nav-link"-->
-<!--        active-class="active"-->
-<!--      >-->
-<!--        Кнопка 2-->
-<!--      </router-link>-->
     </div>
     <div class="nav-right">
       <router-link
