@@ -129,6 +129,8 @@
 </template>
 
 <script>
+import { compile } from 'vue'
+
 export default {
   name: 'RegisterView',
   data() {
@@ -156,6 +158,7 @@ export default {
         exp: '',
         dec: '',
         confirmPassword: '',
+        apiEndpoint: ''
 
       }
     }
@@ -173,18 +176,40 @@ export default {
       this.step = 1
     },
     handleRegister() {
+
+      this.formData.apiEndpoint = '/register' + "/" + this.selectedUserType;
+
       if (this.formData.password !== this.formData.confirmPassword) {
         alert('Пароли не совпадают!')
         return
       }
 
-      const userData = {
-        ...this.formData,
-        userType: this.selectedUserType
+    const registrationData = {
+      endpoint: '/register/' + this.selectedUserType,
+      userData: {
+        username: this.formData.username,
+        email: this.formData.email,
+        password: this.formData.password,
+        firstname: this.formData.name,
+        lastname: this.formData.surname,
+        dec: this.formData.description,
+        exp: this.formData.experienceYears
+        },
+        mode: this.selectedUserType === 'tutor' ? 'tutor' : 'student'
       }
 
-      console.log('Registration data:', userData)
-      // API
+
+
+      this.$store.dispatch('auth/register', registrationData).then(
+        () => {
+          this.message = 'Registration successful!';
+          setTimeout(() => this.$router.push('/login'), 2000);
+        },
+        error => {
+          this.message = error.response.data.message || error.message;
+        }
+      );
+
     }
   }
 }

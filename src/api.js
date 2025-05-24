@@ -7,12 +7,14 @@ const api = axios.create({
 
 // Добавляем автоматическую вставку токена (если есть)
 api.interceptors.request.use(config => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+  const user = localStorage.getItem('user');
+  if (user && user.token) {
+    config.headers.Authorization = `Bearer ${user.token}`;
   }
-  return config;
-});
+  return config;},
+  error => {
+    return Promise.reject(error);
+  });
 
 // Методы для работы с объявлениями
 export default {

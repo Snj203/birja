@@ -38,6 +38,7 @@
 </template>
 
 <script>
+
 export default {
   name: 'LoginView',
   data() {
@@ -48,15 +49,27 @@ export default {
   },
   methods: {
     handleLogin() {
-      // logic
-      console.log('Login attempt with:', this.username, this.password)
-      // api
+      const credentials = {
+        username: this.username,
+        password: this.password
+      };
+      this.$store.dispatch('auth/login', credentials).then(
+        () => {
+          this.$router.push('/');
+        },
+        error => {
+          this.message = error.response.data.message || error.message;
+        }
+      ).catch(error => {
+        console.error("Login error:", error);
+        this.message = error.response?.data?.message ||
+          error.message ||
+          "Ошибка входа";
+
+      });
     }
-  },
-  metaInfo: {
-    title: 'Вход'
   }
-}
+};
 </script>
 
 <style scoped>
