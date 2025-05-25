@@ -109,7 +109,7 @@
           <div class="form-group">
             <label for="exp">Лет опыта</label>
             <input
-              type="exp"
+              type="number"
               id="exp"
               v-model="formData.exp"
               placeholder=""

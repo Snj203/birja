@@ -29,6 +29,10 @@
         <button type="submit" class="auth-button">Войти</button>
       </form>
 
+      <a href="http:/localhost:8081/oauth2/authorization/google" class="btn btn-google">
+        <i class="fab fa-google"></i> Войти через Google
+      </a>
+
       <div class="auth-footer">
         <p>Нет аккаунта? <router-link to="/register">Зарегистрируйтесь</router-link></p>
         <router-link to="/forgot-password">Забыли пароль?</router-link>
@@ -62,9 +66,7 @@ export default {
         }
       ).catch(error => {
         console.error("Login error:", error);
-        this.message = error.response?.data?.message ||
-          error.message ||
-          "Ошибка входа";
+        this.message = error
 
       });
     }
