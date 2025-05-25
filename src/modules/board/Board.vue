@@ -100,14 +100,6 @@
               >
             </div>
 
-            <div class="form-group">
-              <label>Место проведения</label>
-              <input
-                type="text"
-                v-model="newAd.location"
-                placeholder="Например: Онлайн или Москва, м. Китай-город"
-              >
-            </div>
           </div>
 
           <div class="form-actions">
@@ -133,7 +125,6 @@
 
           <div class="ad-details">
             <span>Цена: {{ ad.price }} сом/час</span>
-            <span>Место: {{ ad.location }}</span>
           </div>
         </div>
 

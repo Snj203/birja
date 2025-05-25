@@ -58,7 +58,6 @@
 </template>
 
 <script>
-import AppHeader from "@/system/AppHeader.vue";
 import ModuleButton from '@/components/navigation/ModuleButton.vue';
 import StatusBadge from '@/components/ui/StatusBadge.vue';
 import StudentManagement from '@/modules/students/StudentManagement.vue';
@@ -70,7 +69,6 @@ import EventFormModal from '@/modules/schedule/EventFormModal.vue';
 
 export default {
   components: {
-    AppHeader,
     ModuleButton,
     StatusBadge,
     StudentManagement,
