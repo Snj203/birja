@@ -5,7 +5,6 @@
         <h1>
           <router-link to="/" class="title-link">{{title}}</router-link>
         </h1>
-        <span class="version">v{{ version }}</span>
       </div>
       <nav class="user-menu">
         <div v-if="!isAuthenticated" class="auth-buttons">
@@ -46,7 +45,7 @@ import DropdownMenu from './DropdownMenu.vue';
 const props = defineProps({
   title: {
     type: String,
-    default: 'Биржа мемов'
+    default: 'Биржа репетиторов'
   },
   version: {
     type: String,

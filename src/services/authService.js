@@ -15,6 +15,7 @@ class AuthService {
       .then(response => {
         console.log(response);
         if (response.status === 200) {
+          response.data.username = user.username;
           localStorage.setItem('user', JSON.stringify(response.data));
         }
         return response.data;

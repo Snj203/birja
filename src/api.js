@@ -54,7 +54,13 @@ export default {
   },
 
   createAd(adData) {
-    return api.post('/ads', adData);
+    const user = JSON.parse(localStorage.getItem('user'));
+    const token = user?.access_token;
+    return api.post('/ads', adData,{
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
   },
 
   deleteAd(id) {
