@@ -1,22 +1,12 @@
-import { createRouter, createWebHistory } from 'vue-router'
-import HomePage from '../views/Home-Page.vue'
+import {createRouter, createWebHistory} from 'vue-router'
+import Board from "@/modules/board/Board.vue";
 
 const routes = [
   {
     path: '/',
-    name: 'home',
-    component: HomePage
+    name: 'main',
+    component: Board
   },
-  // {
-  //   path: '/tab1',
-  //   name: 'tab1',
-  //   component: () => import('../views/Tab1View.vue')
-  // },
-  // {
-  //   path: '/tab2',
-  //   name: 'tab2',
-  //   component: () => import('../views/Tab2View.vue')
-  // },
   {
     path: '/login',
     name: 'login',
