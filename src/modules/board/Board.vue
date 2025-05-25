@@ -9,8 +9,8 @@
           <label>Тип объявления:</label>
           <select v-model="filters.type">
             <option value="all">Все</option>
-            <option value="tutor">Ищу учеников</option>
-            <option value="student">Ищу репетитора</option>
+            <option value="TUTOR">Ищу учеников</option>
+            <option value="STUDENT">Ищу репетитора</option>
           </select>
         </div>
 
@@ -182,11 +182,11 @@ onMounted(async () => {
   try {
     const responseAds = await api.getAllAds();
     ads.value = responseAds.data;
+    console.log('Загруженные объявления:', ads.value);
 
     const responseSubjects = await api.getSubjects();
     subjects.value = responseSubjects.data.map(subject => subject.name);
-    console.log('subjects', subjects.value);
-  } catch (error) {
+    } catch (error) {
     console.error(error);
   }
 });
