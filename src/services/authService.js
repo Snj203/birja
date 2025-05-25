@@ -4,6 +4,7 @@ const API_URL = 'http://localhost:8081/api/auth';
 
 class AuthService {
   login(user) {
+
     return axios
       .post('http://localhost:8081/login',null,{
          params : {
@@ -25,16 +26,13 @@ class AuthService {
 
   register(registrationData) {
 
-
-    console.log(API_URL + registrationData.endpoint);
-
     if(registrationData.mode === 'tutor') {
       return axios.post(API_URL + registrationData.endpoint, {
         username: registrationData.userData.username,
         email: registrationData.userData.email,
         password: registrationData.userData.password,
-        firstName: registrationData.userData.firstname,
-        lastName: registrationData.userData.lastname,
+        firstname: registrationData.userData.firstname,
+        lastname: registrationData.userData.lastname,
         description: registrationData.userData.dec,
         experienceYears: registrationData.userData.exp
       });
@@ -43,8 +41,8 @@ class AuthService {
         username: registrationData.userData.username,
         email: registrationData.userData.email,
         password: registrationData.userData.password,
-        firstName: registrationData.userData.firstname,
-        lastName: registrationData.userData.lastname,
+        firstname: registrationData.userData.firstname,
+        lastname: registrationData.userData.lastname,
       });
     }
   }

@@ -113,6 +113,7 @@
               id="exp"
               v-model="formData.exp"
               placeholder=""
+              required
             >
           </div>
         </template>
@@ -192,8 +193,8 @@ export default {
         password: this.formData.password,
         firstname: this.formData.name,
         lastname: this.formData.surname,
-        dec: this.formData.description,
-        exp: this.formData.experienceYears
+        dec: this.formData.dec,
+        exp: this.formData.exp
         },
         mode: this.selectedUserType === 'tutor' ? 'tutor' : 'student'
       }
