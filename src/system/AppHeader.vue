@@ -2,30 +2,30 @@
   <header class="app-header">
     <div class="header-content">
       <div class="logo">
-        <h1>{{ title }}</h1>
+        <h1>
+          <router-link to="/" class="title-link">{{title}}</router-link>
+        </h1>
         <span class="version">v{{ version }}</span>
       </div>
       <nav class="user-menu">
-        <!-- Отображаем кнопки входа/регистрации, если пользователь не аутентифицирован -->
         <div v-if="!isAuthenticated" class="auth-buttons">
           <div class="nav-right">
             <router-link
               to="/login"
-              class="nav-link"
+              class="nav-link login-btn"
               active-class="active"
             >
               Войти
             </router-link>
             <router-link
               to="/register"
-              class="nav-link"
+              class="nav-link signup-btn"
               active-class="active"
             >
               Зарегистрироваться
             </router-link>
           </div>
         </div>
-        <!-- Отображаем меню пользователя и уведомления, если пользователь аутентифицирован -->
         <template v-else>
           <button class="notification-btn" @click="toggleNotifications">
             <span v-if="unreadNotifications" class="badge">{{ unreadNotifications }}</span>
@@ -54,25 +54,20 @@ const props = defineProps({
   }
 });
 
-// Состояние аутентификации пользователя
 const isAuthenticated = ref(false);
 
-// Данные пользователя (по умолчанию null, если не аутентифицирован)
 const currentUser = ref(null);
 
-// Количество непрочитанных уведомлений
 const unreadNotifications = ref(0);
 
 // Функция для обработки выхода
 const handleLogout = () => {
   console.log('Logout button clicked');
-  // Здесь должна быть логика выхода, например, очистка токена
   isAuthenticated.value = false;
   currentUser.value = null;
   unreadNotifications.value = 0;
 };
 
-// Функция для уведомлений
 const toggleNotifications = () => {
   console.log('Show notifications');
 };
@@ -96,9 +91,12 @@ const toggleNotifications = () => {
   background-color: #e0e0e0;
 }
 
-.nav-link.active {
-  background-color: #42b983;
-  color: white;
+.login-btn.active {
+  background-color: #2980b9;
+}
+
+.signup-btn.active {
+  background-color: #27ae60;
 }
 
 .app-header {
@@ -151,6 +149,10 @@ const toggleNotifications = () => {
   color: white;
 }
 
+.login-btn.active {
+  background-color: #2980b9;
+}
+
 .login-btn:hover {
   background-color: #2980b9;
 }
@@ -194,5 +196,14 @@ const toggleNotifications = () => {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.title-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.title-link:hover {
+  text-decoration: underline;
 }
 </style>

@@ -29,9 +29,6 @@ body {
   min-height: 90vh;
 }
 
-.navbar {
-  height: 7vh;
-}
 .container-view {
   min-width: 90vw;
   min-height: 80vh;
