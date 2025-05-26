@@ -30,7 +30,9 @@
         <div v-if="message" class="error-message">{{ message }}</div>
       </form>
 
+
       <div class="auth-footer">
+        <button @click="loginWithGoogle">Login with Google</button>
         <p>Нет аккаунта?
           <router-link to="/register" v-if="!isAuthenticated">Зарегистрируйтесь</router-link>
         </p>
@@ -61,6 +63,10 @@ export default {
       }
     });
 
+    function loginWithGoogle() {
+      window.location.href = 'http://localhost:8081/oauth2/authorization/google';
+    }
+
     const handleLogin = async () => {
       const credentials = {
         username: username.value,
@@ -84,7 +90,8 @@ export default {
       password,
       message,
       isAuthenticated,
-      handleLogin
+      handleLogin,
+      loginWithGoogle
     };
   }
 };
