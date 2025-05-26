@@ -27,10 +27,11 @@
         </div>
 
         <button type="submit" class="auth-button">Войти</button>
+        <div v-if="message" class="error-message">{{ message }}</div>
       </form>
 
       <div class="auth-footer">
-        <p>Нет аккаунта? <router-link to="/register">Зарегистрируйтесь</router-link></p>
+        <p>Нет аккаунта? <router-link to="/register" v-if="!isAuthenticated">Зарегистрируйтесь</router-link></p>
         <router-link to="/forgot-password">Забыли пароль?</router-link>
       </div>
     </div>
@@ -38,36 +39,50 @@
 </template>
 
 <script>
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import AuthService from '@/services/authService';
 
 export default {
   name: 'LoginView',
-  data() {
-    return {
-      username: '',
-      password: ''
-    }
-  },
-  methods: {
-    handleLogin() {
-      const credentials = {
-        username: this.username,
-        password: this.password
-      };
-      this.$store.dispatch('auth/login', credentials).then(
-        () => {
-          this.$router.push('/');
-        },
-        error => {
-          this.message = error.response.data.message || error.message;
-        }
-      ).catch(error => {
-        console.error("Login error:", error);
-        this.message = error.response?.data?.message ||
-          error.message ||
-          "Ошибка входа";
+  setup() {
+    const router = useRouter();
+    const username = ref('');
+    const password = ref('');
+    const message = ref('');
+    const isAuthenticated = ref(false);
 
-      });
-    }
+    onMounted(() => {
+      const user = localStorage.getItem('user');
+      if (user) {
+        isAuthenticated.value = true;
+      }
+    });
+
+    const handleLogin = async () => {
+      const credentials = {
+        username: username.value,
+        password: password.value
+      };
+      try {
+        const response = await AuthService.login(credentials);
+        if (response && response.status === 200) {
+          isAuthenticated.value = true;
+          await router.push('/');
+        }
+      } catch (error) {
+        console.error("Login error:", error);
+        message.value = error.response?.data?.message || error.message || "Ошибка входа";
+      }
+    };
+
+    return {
+      username,
+      password,
+      message,
+      isAuthenticated,
+      handleLogin
+    };
   }
 };
 </script>
@@ -87,7 +102,7 @@ export default {
   padding: 2rem;
   background: #fff;
   border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 .auth-form {
@@ -137,5 +152,11 @@ export default {
 .auth-footer a {
   color: #42b983;
   text-decoration: none;
+}
+
+.error-message {
+  color: #e74c3c;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
 }
 </style>

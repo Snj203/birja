@@ -1,6 +1,5 @@
 <template>
   <div class="tutor-board">
-    <!-- Заголовок и фильтры -->
     <h1 class="board-title">Доска объявлений</h1>
 
     <div class="controls">
@@ -36,7 +35,6 @@
       </button>
     </div>
 
-    <!-- Форма создания (модальное окно) -->
     <div v-if="showForm" class="modal-overlay" @click.self="showForm = false">
       <div class="modal-content">
         <form @submit.prevent="submitNewAd" class="ad-form">
@@ -147,7 +145,6 @@
 
           <div class="ad-details">
             <span>Цена: {{ ad.price }} сом/час</span>
-            <span>Место: {{ ad.location || 'Не указано' }}</span>
           </div>
         </div>
 
@@ -158,12 +155,10 @@
       </div>
     </div>
 
-    <!-- Состояние загрузки -->
     <div v-if="isLoading" class="loading-state">
       <p>Загрузка объявлений...</p>
     </div>
 
-    <!-- Состояние ошибки или пустой список -->
     <div v-if="filteredAds.length === 0 && !isLoading && !error" class="empty-state">
       <p>Нет объявлений по выбранным фильтрам</p>
       <button @click="resetFilters">Показать все</button>

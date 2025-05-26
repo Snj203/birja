@@ -8,7 +8,6 @@
 <script setup>
 import { ref, onMounted, onUnmounted } from 'vue';
 
-// Пропсы
 const props = defineProps({
   message: {
     type: String,
@@ -16,23 +15,21 @@ const props = defineProps({
   },
   type: {
     type: String,
-    default: 'info', // Возможные значения: 'success', 'error', 'warning', 'info'
+    default: 'info',
     validator: (value) => ['success', 'error', 'warning', 'info'].includes(value)
   },
   duration: {
     type: Number,
-    default: 3000 // По умолчанию 3 секунды
+    default: 3000
   },
   closable: {
     type: Boolean,
-    default: true // Можно ли закрыть вручную
+    default: true
   }
 });
 
-// Эмит события закрытия
 const emit = defineEmits(['close']);
 
-// Таймер для автоматического закрытия
 const timer = ref(null);
 
 const handleClose = () => {
@@ -40,7 +37,6 @@ const handleClose = () => {
   emit('close');
 };
 
-// Автоматическое закрытие по истечению duration
 onMounted(() => {
   if (props.duration > 0) {
     timer.value = setTimeout(() => {
@@ -105,7 +101,6 @@ onUnmounted(() => {
   opacity: 0.7;
 }
 
-/* Анимация появления и исчезновения */
 @keyframes slideIn {
   from {
     transform: translateY(-20px);
@@ -117,7 +112,6 @@ onUnmounted(() => {
   }
 }
 
-/* Анимация для TransitionGroup */
 .notification-list-enter-active,
 .notification-list-leave-active {
   transition: all 0.3s ease;

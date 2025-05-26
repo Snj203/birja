@@ -3,12 +3,12 @@
     <div class="header-content">
       <div class="logo">
         <h1>
-          <router-link to="/" class="title-link">{{title}}</router-link>
+          <router-link to="/" class="title-link">{{ title }}</router-link>
         </h1>
       </div>
       <nav class="user-menu">
-        <div v-if="!isAuthenticated" class="auth-buttons">
-          <div class="nav-right">
+        <div class="nav-right">
+          <template v-if="!isAuthenticated">
             <router-link
               to="/login"
               class="nav-link login-btn"
@@ -20,55 +20,47 @@
               to="/register"
               class="nav-link signup-btn"
               active-class="active"
+              v-if="!isAuthenticated"
             >
               Зарегистрироваться
             </router-link>
-          </div>
+          </template>
+          <template v-else>
+            <button class="nav-link logout-btn" @click="handleLogout">Выйти</button>
+          </template>
         </div>
-        <template v-else>
-          <button class="notification-btn" @click="toggleNotifications">
-            <span v-if="unreadNotifications" class="badge">{{ unreadNotifications }}</span>
-            <i class="icon-bell"></i>
-          </button>
-          <dropdown-menu :user="currentUser" />
-          <button class="auth-btn logout-btn" @click="handleLogout">Выйти</button>
-        </template>
       </nav>
     </div>
   </header>
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import DropdownMenu from './DropdownMenu.vue';
+import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router';
+import AuthService from '@/services/authService';
+
+const router = useRouter();
 
 const props = defineProps({
   title: {
     type: String,
     default: 'Биржа репетиторов'
-  },
-  version: {
-    type: String,
-    default: '1.0.0'
   }
 });
 
 const isAuthenticated = ref(false);
 
-const currentUser = ref(null);
+onMounted(() => {
+  const user = localStorage.getItem('user');
+  if (user) {
+    isAuthenticated.value = true;
+  }
+});
 
-const unreadNotifications = ref(0);
-
-// Функция для обработки выхода
 const handleLogout = () => {
-  console.log('Logout button clicked');
+  AuthService.logout();
   isAuthenticated.value = false;
-  currentUser.value = null;
-  unreadNotifications.value = 0;
-};
-
-const toggleNotifications = () => {
-  console.log('Show notifications');
+  router.push('/');
 };
 </script>
 
@@ -76,26 +68,46 @@ const toggleNotifications = () => {
 .nav-right {
   display: flex;
   gap: 1rem;
+  align-items: center;
 }
 
 .nav-link {
   padding: 0.5rem 1rem;
   text-decoration: none;
-  background-color: white;
-  color: brown;
   border-radius: 4px;
+  font-size: 0.9rem;
+  transition: background-color 0.2s;
 }
 
-.nav-link:hover {
-  background-color: #e0e0e0;
+.nav-link.login-btn {
+  background-color: #3498db;
+  color: white;
 }
 
-.login-btn.active {
+.nav-link.login-btn:hover,
+.nav-link.login-btn.active {
   background-color: #2980b9;
 }
 
-.signup-btn.active {
+.nav-link.signup-btn {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.nav-link.signup-btn:hover,
+.nav-link.signup-btn.active {
   background-color: #27ae60;
+}
+
+.nav-link.logout-btn {
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.nav-link.logout-btn:hover {
+  background-color: #c0392b;
 }
 
 .app-header {
@@ -116,85 +128,6 @@ const toggleNotifications = () => {
   display: flex;
   align-items: baseline;
   gap: 0.5rem;
-}
-
-.version {
-  font-size: 0.8rem;
-  opacity: 0.7;
-}
-
-.user-menu {
-  display: flex;
-  gap: 1rem;
-  align-items: center;
-}
-
-.auth-buttons {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.auth-btn {
-  padding: 0.5rem 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 0.9rem;
-  transition: background-color 0.2s;
-}
-
-.login-btn {
-  background-color: #3498db;
-  color: white;
-}
-
-.login-btn.active {
-  background-color: #2980b9;
-}
-
-.login-btn:hover {
-  background-color: #2980b9;
-}
-
-.signup-btn {
-  background-color: #2ecc71;
-  color: white;
-}
-
-.signup-btn:hover {
-  background-color: #27ae60;
-}
-
-.logout-btn {
-  background-color: #e74c3c;
-  color: white;
-}
-
-.logout-btn:hover {
-  background-color: #c0392b;
-}
-
-.notification-btn {
-  position: relative;
-  background: none;
-  border: none;
-  color: white;
-  cursor: pointer;
-}
-
-.badge {
-  position: absolute;
-  top: -5px;
-  right: -5px;
-  background: #e74c3c;
-  color: white;
-  border-radius: 50%;
-  width: 18px;
-  height: 18px;
-  font-size: 0.7rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .title-link {
