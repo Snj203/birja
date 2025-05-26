@@ -18,6 +18,11 @@ const routes = [
     component: () => import('../views/RegisterView.vue')
   },
   {
+    path: '/oauth-success',
+    name: 'OAuthCallback',
+    component: () => import('../views/OAuthCallback')
+  },
+  {
     path:'/tutors/me',
     name: 'tutor',
     component: () => import('../views/Tutor.vue')

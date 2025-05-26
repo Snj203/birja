@@ -29,14 +29,16 @@
         <button type="submit" class="auth-button">Войти</button>
       </form>
 
-      <a href="http:/localhost:8081/oauth2/authorization/google" class="btn btn-google">
-        <i class="fab fa-google"></i> Войти через Google
-      </a>
 
       <div class="auth-footer">
+        <button @click="loginWithGoogle">Login with Google</button>
         <p>Нет аккаунта? <router-link to="/register">Зарегистрируйтесь</router-link></p>
         <router-link to="/forgot-password">Забыли пароль?</router-link>
       </div>
+
+
+
+
     </div>
   </main>
 </template>
@@ -52,6 +54,9 @@ export default {
     }
   },
   methods: {
+    loginWithGoogle() {
+      window.location.href = 'http://localhost:8081/oauth2/authorization/google';
+    },
     handleLogin() {
       const credentials = {
         username: this.username,
