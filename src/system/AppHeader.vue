@@ -20,7 +20,7 @@
               to="/register"
               class="nav-link signup-btn"
               active-class="active"
-              v-if="!isAuthenticated"
+              v-if="! isAuthenticated"
             >
               Зарегистрироваться
             </router-link>
@@ -35,34 +35,28 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue';
+import { computed } from 'vue';
+import { useStore } from 'vuex';
 import { useRouter } from 'vue-router';
-import AuthService from '@/services/authService';
 
+const store = useStore();
 const router = useRouter();
 
-const props = defineProps({
+const isAuthenticated = computed(() => store.state.auth.status.loggedIn);
+
+const handleLogout = () => {
+  store.dispatch('auth/logout');
+  router.push('/');
+};
+defineProps({
   title: {
     type: String,
     default: 'Биржа репетиторов'
   }
 });
-
-const isAuthenticated = ref(false);
-
-onMounted(() => {
-  const user = localStorage.getItem('user');
-  if (user) {
-    isAuthenticated.value = true;
-  }
-});
-
-const handleLogout = () => {
-  AuthService.logout();
-  isAuthenticated.value = false;
-  router.push('/');
-};
 </script>
+
+
 
 <style scoped>
 .nav-right {

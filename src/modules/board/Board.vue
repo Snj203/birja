@@ -204,7 +204,6 @@ const loadData = async () => {
       author: ad.username,
       createdAt: ad.createdAt || new Date().toISOString()
     }));
-    console.log('Загруженные объявления:', ads.value);
 
     const responseSubjects = await api.getSubjects();
     subjects.value = responseSubjects.data.map(subject => subject.name);

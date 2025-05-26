@@ -31,7 +31,9 @@
       </form>
 
       <div class="auth-footer">
-        <p>Нет аккаунта? <router-link to="/register" v-if="!isAuthenticated">Зарегистрируйтесь</router-link></p>
+        <p>Нет аккаунта?
+          <router-link to="/register" v-if="!isAuthenticated">Зарегистрируйтесь</router-link>
+        </p>
         <router-link to="/forgot-password">Забыли пароль?</router-link>
       </div>
     </div>
@@ -39,9 +41,9 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
-import { useRouter } from 'vue-router';
-import AuthService from '@/services/authService';
+import {onMounted, ref} from 'vue';
+import {useRouter} from 'vue-router';
+import store from '@/storage/storage.js';
 
 export default {
   name: 'LoginView',
@@ -64,17 +66,18 @@ export default {
         username: username.value,
         password: password.value
       };
+
       try {
-        const response = await AuthService.login(credentials);
+        const response = await store.dispatch('auth/login', credentials);
         if (response && response.status === 200) {
-          isAuthenticated.value = true;
           await router.push('/');
         }
       } catch (error) {
         console.error("Login error:", error);
-        message.value = error.response?.data?.message || error.message || "Ошибка входа";
+        message.value = error.response?.message || error.message || "Ошибка входа";
       }
     };
+
 
     return {
       username,
